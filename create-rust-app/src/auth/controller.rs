@@ -550,9 +550,11 @@ pub fn register(
     )
     .unwrap();
 
+    let auth_router_prefix = std::env::var("AUTH_ROUTER_PREFIX").unwrap();
+
     mailer
         .templates
-        .send_register(mailer, &user.email, &format!("activate?token={token}"));
+        .send_register(mailer, &user.email, &format!("{auth_router_prefix}/activate?token={token}"));
 
     Ok(())
 }
@@ -661,12 +663,14 @@ pub fn forgot_password(
         )
         .unwrap();
 
-        let link = &format!("reset?token={reset_token}");
+        let auth_router_prefix = std::env::var("AUTH_ROUTER_PREFIX").unwrap();
+
+        let link = &format!("{auth_router_prefix}/reset?token={reset_token}");
         mailer
             .templates
             .send_recover_existent_account(mailer, &user.email, link);
     } else {
-        let link = &"register".to_string();
+        let link = &"{auth_router_prefix}/register".to_string();
         mailer
             .templates
             .send_recover_nonexistent_account(mailer, &item.email, link);
