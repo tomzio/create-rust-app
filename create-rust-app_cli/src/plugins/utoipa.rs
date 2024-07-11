@@ -22,7 +22,7 @@ impl Plugin for Utoipa {
         // add link to Swagger UI docs
         fs::replace(
             "frontend/src/App.tsx",
-            r#"{/* CRA: right-aligned nav buttons */}"#,
+            r"{/* CRA: right-aligned nav buttons */}",
             r#"{/* CRA: right-aligned nav buttons */}
             <a className="NavButton" onClick={() => window.location.href = "/swagger-ui/" }>API</a>"#,
         )?;
@@ -41,7 +41,7 @@ impl Plugin for Utoipa {
                     r#"utoipa-swagger-ui = { version="4", features=["actix-web"]}"#,
                 )?;
             }
-            _ => {
+            BackendFramework::Poem => {
                 crate::logger::error(
                     "plugin_utoipa not yet implemented for backends other than actix-web",
                 );
@@ -70,7 +70,7 @@ impl Plugin for Utoipa {
             ]));"#,
                 )?;
             }
-            _ => {
+            BackendFramework::Poem => {
                 panic!("plugin_utoipa not yet implemented for backends other than actix-web");
             }
         };

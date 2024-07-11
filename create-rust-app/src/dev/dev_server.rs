@@ -15,6 +15,8 @@ use crate::{dev::controller, Database};
 
 use super::{CreateRustAppMigration, DevServerEvent};
 
+/// TODO: use a state machine or refactor into an enum
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug)]
 struct CurrentDevState {
     backend_status: bool,
@@ -45,9 +47,10 @@ pub async fn start(
     file_events_s: Sender<String>,
     features: Vec<String>,
 ) {
-    if dotenv::dotenv().is_err() {
-        panic!("ERROR: Could not load environment variables from dotenv file");
-    }
+    assert!(
+        dotenv::dotenv().is_ok(),
+        "ERROR: Could not load environment variables from dotenv file"
+    );
 
     let app_state = Arc::new(AppState {
         project_dir,
@@ -87,9 +90,10 @@ pub async fn start(
         .with_state(app_state);
 
     println!("Starting dev server @ http://localhost:{dev_port}/");
-
-    axum::Server::bind(&format!("0.0.0.0:{dev_port}").parse().unwrap())
-        .serve(app.into_make_service())
+    let listener = tokio::net::TcpListener::bind(&format!("0.0.0.0:{dev_port}"))
+        .await
+        .unwrap();
+    axum::serve(listener, app.into_make_service())
         .await
         .unwrap();
 }
@@ -120,6 +124,8 @@ async fn ws_handler(ws: WebSocketUpgrade, State(state): State<Arc<AppState>>) ->
     ws.on_upgrade(|socket| handle_socket(socket, state))
 }
 
+/// TODO break this function up into smaller sub functions
+#[allow(clippy::too_many_lines)]
 async fn handle_socket(stream: WebSocket, state: Arc<AppState>) {
     use axum::extract::ws::Message;
     let (mut sender, mut receiver) = stream.split();
@@ -241,7 +247,7 @@ async fn handle_socket(stream: WebSocket, state: Arc<AppState>) {
                 }
                 DevServerEvent::CompileMessages(messages) => {
                     let mut s = state2.dev.lock().unwrap();
-                    s.compiler_messages = messages.clone();
+                    s.compiler_messages.clone_from(&messages);
                 }
                 DevServerEvent::SHUTDOWN => {
                     let mut s = state2.dev.lock().unwrap();
@@ -295,7 +301,11 @@ async fn handle_socket(stream: WebSocket, state: Arc<AppState>) {
                                     println!("📝 Could not open file `{file_name}`");
                                 });
                             } else if t.eq_ignore_ascii_case("migrate") {
-                                let (success, error_message) = controller::migrate_db(&state3.db);
+                                let (success, error_message) =
+                                    match controller::migrate_db(&state3.db) {
+                                        Ok(_) => (true, None),
+                                        Err(e) => (false, Some(e.to_string())),
+                                    };
 
                                 state3
                                     .tx
@@ -304,10 +314,10 @@ async fn handle_socket(stream: WebSocket, state: Arc<AppState>) {
                             }
                         });
                     }
-                    Message::Binary(_) => {}
-                    Message::Ping(_) => {}
-                    Message::Pong(_) => {}
-                    Message::Close(_) => {}
+                    Message::Binary(_)
+                    | Message::Ping(_)
+                    | Message::Pong(_)
+                    | Message::Close(_) => {}
                 }
             }
         }

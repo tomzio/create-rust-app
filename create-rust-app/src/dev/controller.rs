@@ -1,4 +1,5 @@
 use crate::Database;
+use anyhow::{bail, Result};
 use diesel::{
     migration::{Migration, MigrationSource},
     query_dsl::RunQueryDsl,
@@ -27,6 +28,12 @@ pub struct HealthCheckResponse {
 }
 
 /// /db/query
+///
+/// # Errors
+/// * query fails
+///
+/// # Panics
+/// * cannot connect to the database
 pub fn query_db(db: &Database, body: &MySqlQuery) -> Result<String, diesel::result::Error> {
     let q = format!("SELECT json_agg(q) as json FROM ({}) q;", body.query);
     let mut db = db.get_connection().unwrap();
@@ -37,12 +44,19 @@ pub fn query_db(db: &Database, body: &MySqlQuery) -> Result<String, diesel::resu
 }
 
 /// /db/is-connected
+#[must_use]
 pub fn is_connected(db: &Database) -> bool {
-    let mut db = db.pool.clone().get().unwrap();
+    let Ok(mut db) = db.pool.clone().get() else {
+        return false;
+    };
     let is_connected = sql_query("SELECT 1;").execute(&mut db);
     is_connected.is_err()
 }
 
+/// # Panics
+/// * cannot connect to the database
+/// * cannot find the migrations directory
+#[must_use]
 pub fn get_migrations(db: &Database) -> Vec<CreateRustAppMigration> {
     // Vec<diesel::migration::Migration> {
     let mut db = db.pool.clone().get().unwrap();
@@ -61,25 +75,25 @@ pub fn get_migrations(db: &Database) -> Vec<CreateRustAppMigration> {
 
     let mut all_migrations = vec![];
 
-    file_migrations.iter().for_each(|fm| {
+    for fm in &file_migrations {
         all_migrations.push(CreateRustAppMigration {
             name: fm.name().to_string(),
             version: fm.name().version().to_string(),
             status: MigrationStatus::Unknown,
-        })
-    });
+        });
+    }
 
     // update the status for any pending file_migrations
-    pending_migrations.iter().for_each(|pm| {
+    for pm in &pending_migrations {
         if let Some(existing) = all_migrations.iter_mut().find(|m| {
             m.version
                 .eq_ignore_ascii_case(&pm.name().version().to_string())
         }) {
             existing.status = MigrationStatus::Pending;
         }
-    });
+    }
 
-    db_migrations.iter().for_each(|dm| {
+    for dm in &db_migrations {
         match all_migrations
             .iter_mut()
             .find(|m| m.version.eq_ignore_ascii_case(&dm.to_string()))
@@ -93,13 +107,20 @@ pub fn get_migrations(db: &Database) -> Vec<CreateRustAppMigration> {
                 status: MigrationStatus::AppliedButMissingLocally,
             }),
         }
-    });
+    }
 
     all_migrations
 }
 
 /// /db/needs-migration
 /// checks if a migration is needed
+///
+/// # Panics
+/// * cannot connect to the database
+/// * cannot find the migrations directory
+///
+/// TODO: return a Result instead of panicking
+#[must_use]
 pub fn needs_migration(db: &Database) -> bool {
     let mut db = db.pool.clone().get().unwrap();
 
@@ -109,7 +130,14 @@ pub fn needs_migration(db: &Database) -> bool {
 
 /// /db/migrate
 /// performs any pending migrations
-pub fn migrate_db(db: &Database) -> (bool, /* error message: */ Option<String>) {
+///
+/// # Panics
+/// * cannot connect to the database
+/// * cannot find the migrations directory
+/// * cannot run the migrations
+///
+/// TODO: Propagate more of these errors instead of panicking
+pub fn migrate_db(db: &Database) -> Result<()> {
     let mut db = db.pool.clone().get().unwrap();
 
     let source = FileBasedMigrations::find_migrations_directory().unwrap();
@@ -117,18 +145,18 @@ pub fn migrate_db(db: &Database) -> (bool, /* error message: */ Option<String>) 
         MigrationHarness::has_pending_migration(&mut db, source.clone()).unwrap();
 
     if !has_pending_migrations {
-        return (true, None);
+        return Ok(());
     }
 
     let op = MigrationHarness::run_pending_migrations(&mut db, source);
     match op {
-        Ok(_) => (true, None),
+        Ok(_) => Ok(()),
         Err(err) => {
             println!("{err:#?}");
-            (false, Some(err.to_string()))
+            bail!(err)
         }
     }
 }
 
 /// /health
-pub fn health() {}
+pub const fn health() {}

@@ -18,6 +18,7 @@ impl Plugin for Storage {
         "Storage"
     }
 
+    #[allow(clippy::too_many_lines)]
     fn install(&self, install_config: InstallConfig) -> Result<()> {
         for filename in Asset::iter() {
             let file_contents = Asset::get(filename.as_ref()).unwrap();
@@ -37,18 +38,18 @@ impl Plugin for Storage {
 
         fs::append(
             ".env.example",
-            r#"
+            r"
 S3_HOST=http://localhost:9000
 S3_REGION=minio
 S3_BUCKET=bucket
 S3_ACCESS_KEY_ID=access_key
 S3_SECRET_ACCESS_KEY=secret_key
-"#,
+",
         )?;
 
         fs::replace(
             "frontend/src/App.tsx",
-            r#"{/* CRA: routes */}"#,
+            r"{/* CRA: routes */}",
             r#"{/* CRA: routes */}
             <Route path="/files" element={<Files />} />"#,
         )?;
@@ -62,15 +63,15 @@ S3_SECRET_ACCESS_KEY=secret_key
 
         fs::replace(
             "frontend/src/App.tsx",
-            r##"import { Todos } from './containers/Todo'"##,
-            r##"import { Todos } from './containers/Todo'
-import { Files } from './containers/Files'"##,
+            r"import { Todos } from './containers/Todo'",
+            r"import { Todos } from './containers/Todo'
+import { Files } from './containers/Files'",
         )?;
 
         crate::content::migration::create(
             "plugin_storage",
             match install_config.backend_database {
-                BackendDatabase::Postgres => indoc! {r#"
+                BackendDatabase::Postgres => indoc! {r"
 CREATE TABLE attachment_blobs(
   id SERIAL PRIMARY KEY,
 
@@ -94,8 +95,8 @@ CREATE TABLE attachments(
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-"#},
-                BackendDatabase::Sqlite => indoc! {r#"
+"},
+                BackendDatabase::Sqlite => indoc! {r"
 CREATE TABLE attachment_blobs(
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 
@@ -119,12 +120,12 @@ CREATE TABLE attachments(
 
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-"#},
+"},
             },
-            indoc! {r#"
+            indoc! {r"
 DROP TABLE attachment_blobs;
 DROP TABLE attachments;
-"#},
+"},
         )?;
 
         match install_config.backend_framework {
@@ -137,8 +138,8 @@ DROP TABLE attachments;
                 fs::replace(
                     "backend/main.rs",
                     "app = app.app_data(Data::new(app_data.mailer.clone()));",
-                    r#"app = app.app_data(Data::new(app_data.mailer.clone()));
-        app = app.app_data(Data::new(app_data.storage.clone()));"#,
+                    r"app = app.app_data(Data::new(app_data.mailer.clone()));
+        app = app.app_data(Data::new(app_data.storage.clone()));",
                 )?;
             }
             BackendFramework::Poem => {

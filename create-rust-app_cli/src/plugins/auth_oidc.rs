@@ -18,6 +18,7 @@ impl Plugin for AuthOIDC {
         "OIDC Auth"
     }
 
+    #[allow(clippy::too_many_lines)]
     fn install(&self, install_config: InstallConfig) -> Result<()> {
         if !install_config.plugin_auth {
             logger::exit_code("Cannot install OIDC Auth plugin without Auth plugin", 1);
@@ -94,7 +95,7 @@ impl Plugin for AuthOIDC {
                     r#".with(AddData::new(AppConfig {
                     app_url: std::env::var("APP_URL").unwrap(),
                  })"#,
-                    r##".with(AddData::new(AppConfig {
+                    r#".with(AddData::new(AppConfig {
                     app_url: std::env::var("APP_URL").unwrap(),
                  })
                  .with(AddData::new(create_rust_app::auth::AuthConfig {
@@ -110,7 +111,7 @@ impl Plugin for AuthOIDC {
                     app_url = std::env::var("APP_URL").unwrap()
                 ),
             )],
-        })"##,
+        })"#,
                 )?;
             }
         }
@@ -122,7 +123,7 @@ impl Plugin for AuthOIDC {
         crate::content::migration::create(
             "plugin_auth-oidc",
             match install_config.backend_database {
-                BackendDatabase::Postgres => indoc! {r#"
+                BackendDatabase::Postgres => indoc! {r"
       CREATE TABLE user_oauth2_links (
         id SERIAL PRIMARY KEY,
         provider TEXT NOT NULL,
@@ -144,8 +145,8 @@ impl Plugin for AuthOIDC {
       );
 
       SELECT manage_updated_at('user_oauth2_links');
-    "#},
-                BackendDatabase::Sqlite => indoc! {r#"
+    "},
+                BackendDatabase::Sqlite => indoc! {r"
       CREATE TABLE user_oauth2_links (
         id SERIAL PRIMARY KEY,
         provider TEXT NOT NULL,
@@ -165,11 +166,11 @@ impl Plugin for AuthOIDC {
         created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
       );
 
-    "#},
+    "},
             },
-            indoc! {r#"
+            indoc! {r"
       DROP TABLE user_oauth2_links;
-    "#},
+    "},
         )?;
 
         // ===============================
@@ -179,15 +180,15 @@ impl Plugin for AuthOIDC {
         fs::replace(
             "frontend/src/hooks/useAuth.tsx",
             "logout,",
-            indoc! {r#"logout,
+            indoc! {r"logout,
 loginOIDC,
-completeOIDCLogin"#},
+completeOIDCLogin"},
         )?;
 
         fs::replace(
             "frontend/src/hooks/useAuth.tsx",
             "const logout = async ()",
-            indoc! {r#"
+            indoc! {r"
 const loginOIDC = async (
     provider: string,
     options?: { redirectUrl?: 'current-url' | string }
@@ -238,14 +239,14 @@ const completeOIDCLogin = (): boolean => {
     }
 }
 
-const logout = async ()"#},
+const logout = async ()"},
         )?;
 
         fs::replace(
             "frontend/src/App.tsx",
             "import { LoginPage } from './containers/LoginPage'",
-            r#"import { LoginPage } from './containers/LoginPage'
-import { OauthLoginResultPage } from './containers/OauthLoginResultPage'"#,
+            r"import { LoginPage } from './containers/LoginPage'
+import { OauthLoginResultPage } from './containers/OauthLoginResultPage'",
         )?;
 
         fs::replace(
@@ -258,11 +259,11 @@ import { OauthLoginResultPage } from './containers/OauthLoginResultPage'"#,
 
         fs::replace(
             "frontend/src/containers/LoginPage.tsx",
-            r#"<div style={{ display: 'flex', flexFlow: 'column' }}>
+            r"<div style={{ display: 'flex', flexFlow: 'column' }}>
         <button disabled={processing} onClick={login}>
           Login
         </button>
-      </div>"#,
+      </div>",
             r##"<div style={{ display: 'flex', flexFlow: 'column' }}>
         <button disabled={processing} onClick={login}>
           Login
