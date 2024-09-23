@@ -1,6 +1,6 @@
 //!
 //! This package contains all the utility functions that
-//! are exposed directly as `create_rust_app::`<utilty-fn>.
+//! are exposed directly as `create_rustapp::`<utilty-fn>.
 //!
 
 /// constants for paths and files in workspaces

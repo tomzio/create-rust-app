@@ -194,11 +194,11 @@ import { ResetPage } from './containers/ResetPage'",
         match install_config.backend_framework {
             BackendFramework::ActixWeb => crate::content::service::register_actix(
                 "auth",
-                r#"create_rust_app::auth::endpoints(web::scope("/auth"))"#,
+                r#"create_rustapp::auth::endpoints(web::scope("/auth"))"#,
             )?,
             BackendFramework::Poem => crate::content::service::register_poem(
                 "auth",
-                "create_rust_app::auth::api()",
+                "create_rustapp::auth::api()",
                 "/auth",
             )?,
         };

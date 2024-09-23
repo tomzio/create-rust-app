@@ -5,7 +5,7 @@ use poem::{
     web::{Data, Json, Path, Query},
     IntoResponse, Result, Route,
 };
-use create_rust_app::Database;
+use create_rustapp::Database;
 use crate::models::todos::{CreateTodo, Todo, UpdateTodo};
 
 #[tsync::tsync]

@@ -1,4 +1,4 @@
-use create_rust_app::Connection;
+use create_rustapp::Connection;
 use fang::serde::{Deserialize, Serialize};
 use fang::typetag;
 use fang::PgConnection;
@@ -17,7 +17,7 @@ pub struct DailyTodo {
 impl Runnable for DailyTodo {
     fn run(&self, queue: &dyn Queueable) -> Result<(), FangError> {
         println!("Adding daily todo {}", self.text);
-        let db = create_rust_app::Database::new();
+        let db = create_rustapp::Database::new();
 
         let con = &mut db.get_connection().unwrap();
 

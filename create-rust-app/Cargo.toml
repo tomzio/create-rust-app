@@ -1,5 +1,5 @@
 [package]
-name = "create-rust-app"
+name = "create-rustapp"
 description = "Set up a modern rust+react web app by running one command."
 version = "11.0.0"
 edition = "2018"

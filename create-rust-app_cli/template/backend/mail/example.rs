@@ -1,4 +1,4 @@
-use create_rust_app::Mailer;
+use create_rustapp::Mailer;
 
 #[allow(dead_code)]
 pub fn send(mailer: &Mailer, to_email: &str) {

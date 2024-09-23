@@ -1,6 +1,6 @@
 extern crate diesel;
 
-use create_rust_app::AppConfig;
+use create_rustapp::AppConfig;
 
 use poem::endpoint::{StaticFilesEndpoint};
 use poem::{
@@ -16,10 +16,10 @@ mod services;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
-    #[cfg(debug_assertions)] create_rust_app::setup_development().await;
+    #[cfg(debug_assertions)] create_rustapp::setup_development().await;
     tracing_subscriber::fmt::init();
 
-    let data = create_rust_app::setup();
+    let data = create_rustapp::setup();
     simple_logger::init_with_env().unwrap();
 
     let mut api_routes = Route::new();
@@ -33,7 +33,7 @@ async fn main() -> Result<(), std::io::Error> {
     }
 
     app = app.nest("/api", api_routes);
-    app = app.at("*", poem::get(create_rust_app::render_views));
+    app = app.at("*", poem::get(create_rustapp::render_views));
 
     Server::new(TcpListener::bind("0.0.0.0:3000"))
         .run(
@@ -44,7 +44,7 @@ async fn main() -> Result<(), std::io::Error> {
                  })
                 .with(CookieJarManager::new())
                 .with(Tracing)
-                .catch_error(create_rust_app::not_found),
+                .catch_error(create_rustapp::not_found),
         )
         .await
 }

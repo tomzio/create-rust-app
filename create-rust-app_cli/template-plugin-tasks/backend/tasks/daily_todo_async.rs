@@ -16,7 +16,7 @@ pub struct DailyTodoAsync {
 impl AsyncRunnable for DailyTodoAsync {
     async fn run(&self, _queueable: &mut dyn AsyncQueueable) -> Result<(), FangError> {
         println!("(async) Adding daily todo {}", self.text);
-        let db = create_rust_app::Database::new();
+        let db = create_rustapp::Database::new();
 
         let con = &mut db.get_connection().unwrap();
 

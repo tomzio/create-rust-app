@@ -4,4 +4,4 @@ members = [
   "create-rust-app_cli",
   "create-rust-app_cli/qsync",
 ]
-exclude = ["docs", "tests", "test-project"]
+exclude = ["docs"]

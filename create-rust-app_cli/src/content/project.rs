@@ -286,7 +286,7 @@ pub fn create(project_name: &str, creation_options: CreationOptions) -> Result<(
     */
     let cra_version = env!("CARGO_PKG_VERSION");
     if !cra_version.eq("9.2.2") && creation_options.backend_framework == BackendFramework::Poem {
-        logger::error("Poem is not supported in this version of create-rust-app. Please use version 9.2.2 (cargo install create-rust-app_cli@9.2.2). We hope to bring back poem-web as well as other frameworks in the future.");
+        logger::error("Poem is not supported in this version of create-rust-app. Please use version 9.2.2 (cargo install create-rustapp_cli@9.2.2). We hope to bring back poem-web as well as other frameworks in the future.");
         std::process::exit(1);
     }
 
@@ -713,7 +713,7 @@ pub fn check_cli_version() {
         logger::message(&style(&format!("You are running `{name}` v{version}, which is behind the latest release ({new_version}).")).yellow().to_string());
         logger::message(&format!(
             "If you want to update, try: {}",
-            style("cargo install --force create-rust-app_cli").yellow()
+            style("cargo install --force create-rustapp_cli").yellow()
         ));
     });
 }

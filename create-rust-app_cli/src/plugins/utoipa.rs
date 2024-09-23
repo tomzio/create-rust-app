@@ -65,7 +65,7 @@ impl Plugin for Utoipa {
             app = app.service(SwaggerUi::new("/swagger-ui/{_:.*}").urls(vec![
                 (
                      Url::new("auth", "/api-doc/openapi_auth.json"),
-                     create_rust_app::auth::ApiDoc::openapi(),
+                     create_rustapp::auth::ApiDoc::openapi(),
                 ),
             ]));"#,
                 )?;

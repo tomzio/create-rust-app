@@ -180,9 +180,9 @@ use actix_web::guard;",
                 }
                 fs::replace(
                     "backend/main.rs",
-                    "create_rust_app::setup();",
+                    "create_rustapp::setup();",
                     &format!(
-                        r##"create_rust_app::setup();
+                        r##"create_rustapp::setup();
 
     let schema = async_graphql::Schema::build(graphql::QueryRoot, graphql::MutationRoot, graphql::SubscriptionRoot)
         .data(app_data.database.clone())
@@ -209,8 +209,8 @@ use actix_web::guard;",
                 //
                 fs::replace(
                     "backend/main.rs",
-                    "create_rust_app::setup();",
-                    r"create_rust_app::setup();
+                    "create_rustapp::setup();",
+                    r"create_rustapp::setup();
 
     let schema = async_graphql::Schema::build(graphql::QueryRoot, graphql::MutationRoot, graphql::SubscriptionRoot)
         .data(data.database.clone())

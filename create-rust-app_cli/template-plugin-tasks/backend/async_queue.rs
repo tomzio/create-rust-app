@@ -13,7 +13,7 @@ extern crate diesel;
 
 use std::thread;
 use std::time::Duration;
-use create_rust_app::Database;
+use create_rustapp::Database;
 use fang::{AsyncQueue, NoTls, RetentionMode};
 use fang::asynk::async_worker_pool::AsyncWorkerPool;
 
@@ -28,7 +28,7 @@ const NUM_WORKERS: u32 = 2;
 pub async fn main() {
     println!("Starting async pool for 'async' tasks...");
 
-    let mut async_queue = create_rust_app::tasks::create_async_queue(NUM_WORKERS);
+    let mut async_queue = create_rustapp::tasks::create_async_queue(NUM_WORKERS);
 
     async_queue.connect(NoTls).await.expect("Failed to connect to async queue database");
 

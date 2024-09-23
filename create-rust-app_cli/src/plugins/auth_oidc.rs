@@ -61,8 +61,8 @@ impl Plugin for AuthOIDC {
                     r#"app = app.app_data(Data::new(AppConfig {
             app_url: std::env::var("APP_URL").unwrap(),
         }));
-        app = app.app_data(Data::new(create_rust_app::auth::AuthConfig {
-            oidc_providers: vec![create_rust_app::auth::oidc::OIDCProvider::GOOGLE(
+        app = app.app_data(Data::new(create_rustapp::auth::AuthConfig {
+            oidc_providers: vec![create_rustapp::auth::oidc::OIDCProvider::GOOGLE(
                 std::env::var("GOOGLE_OAUTH2_CLIENT_ID").unwrap(),
                 std::env::var("GOOGLE_OAUTH2_CLIENT_SECRET").unwrap(),
                 format!(
@@ -98,8 +98,8 @@ impl Plugin for AuthOIDC {
                     r#".with(AddData::new(AppConfig {
                     app_url: std::env::var("APP_URL").unwrap(),
                  })
-                 .with(AddData::new(create_rust_app::auth::AuthConfig {
-            oidc_providers: vec![create_rust_app::auth::oidc::OIDCProvider::GOOGLE(
+                 .with(AddData::new(create_rustapp::auth::AuthConfig {
+            oidc_providers: vec![create_rustapp::auth::oidc::OIDCProvider::GOOGLE(
                 std::env::var("GOOGLE_OAUTH2_CLIENT_ID").unwrap(),
                 std::env::var("GOOGLE_OAUTH2_CLIENT_SECRET").unwrap(),
                 format!(

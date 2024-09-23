@@ -1,5 +1,5 @@
 [package]
-name = "create-rust-app_cli"
+name = "create-rustapp_cli"
 description = "Set up a modern rust+react web app by running one command."
 version = "11.0.0"
 authors = ["Haris <4259838+Wulf@users.noreply.github.com>"]
@@ -15,7 +15,7 @@ categories = [
   "config",
   "database",
 ]
-default-run = "create-rust-app"
+default-run = "create-rustapp"
 
 [dependencies]
 Inflector = "0.11"
@@ -32,5 +32,5 @@ update-informer = "1.1"
 qsync = { version = "1.0.1" }
 
 [[bin]]
-name = "create-rust-app"
+name = "create-rustapp"
 path = "src/main.rs"

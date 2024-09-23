@@ -9,7 +9,7 @@ pub use subscription::SubscriptionRoot;
 
 use async_graphql::{Data, Schema};
 use async_graphql::http::{ALL_WEBSOCKET_PROTOCOLS};
-use create_rust_app::auth::{Auth, Permission};
+use create_rustapp::auth::{Auth, Permission};
 use jsonwebtoken::{DecodingKey, decode, Validation};
 use std::iter::FromIterator;
 use async_graphql_poem::{GraphQLProtocol, GraphQLRequest, GraphQLResponse, GraphQLWebSocket};
@@ -55,7 +55,7 @@ struct WSConnectPayload {
 
 pub async fn on_connection_init(value: serde_json::Value) -> async_graphql::Result<Data> {
     if let Ok(payload) = serde_json::from_value::<WSConnectPayload>(value) {
-        let access_token = decode::<create_rust_app::auth::AccessTokenClaims>(
+        let access_token = decode::<create_rustapp::auth::AccessTokenClaims>(
             payload.token.as_str(),
             &DecodingKey::from_secret(std::env::var("SECRET_KEY").unwrap().as_ref()),
             &Validation::default(),

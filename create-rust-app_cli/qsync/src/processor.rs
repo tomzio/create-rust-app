@@ -408,7 +408,7 @@ fn process_service_file(
                                     // TODO: what about custom auth types like API tokens?
                                     if state.is_debug {
                                         println!(
-                                            "\t> ParamType::AUTH (create_rust_app::auth::Auth)",
+                                            "\t> ParamType::AUTH (create_rustapp::auth::Auth)",
                                         );
                                     }
                                     hook.uses_auth = true;

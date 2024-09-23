@@ -1,5 +1,5 @@
 use actix_web::{delete, Error, get, HttpResponse, post, put, Result, web::{Data, Json, Path, Query}};
-use create_rust_app::Database;
+use create_rustapp::Database;
 use crate::models::todos::{CreateTodo, Todo, UpdateTodo};
 
 #[tsync::tsync]

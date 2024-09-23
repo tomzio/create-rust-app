@@ -2,7 +2,7 @@ use actix_multipart::Multipart;
 use actix_web::{HttpResponse, ResponseError};
 use actix_web::web::{Data, Path};
 use serde::Serialize;
-use create_rust_app::{Attachment, AttachmentBlob, AttachmentData, Database, Storage};
+use create_rustapp::{Attachment, AttachmentBlob, AttachmentData, Database, Storage};
 use futures_util::StreamExt as _;
 
 #[derive(Serialize)]

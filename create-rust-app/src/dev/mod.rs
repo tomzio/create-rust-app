@@ -200,7 +200,7 @@ fn get_features(project_dir: &'static str) -> Vec<String> {
         // if the manifest has a workspace table, also read dependencies in there
         deps.extend(workspace.dependencies);
     }
-    let dep = deps.get("create-rust-app").unwrap_or_else(|| {
+    let dep = deps.get("create-rustapp").unwrap_or_else(|| {
         panic!(
             "Expected \"{}\" to list 'create-rust-app' as a dependency.",
             project_dir

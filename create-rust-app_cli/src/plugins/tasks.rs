@@ -91,7 +91,7 @@ CREATE INDEX fang_tasks_uniq_hash ON fang_tasks(uniq_hash);
     // See fang docs for more info: https://docs.rs/fang/0.10.4/fang/
     {
         // The blocking queue re-uses the app's db connection pool
-        let queue = create_rust_app::tasks::queue();
+        let queue = create_rustapp::tasks::queue();
 
         // An example of how to schedule a blocking task (see `fang` docs for more info):
         use fang::Queueable;
@@ -102,7 +102,7 @@ CREATE INDEX fang_tasks_uniq_hash ON fang_tasks(uniq_hash);
     // See fang docs for more info: https://docs.rs/fang/0.10.4/fang/
     {
         // The async queue uses a separate db connection pool. We need to connnect it at least once before we can use it throughout out app.
-        let mut async_queue = create_rust_app::tasks::async_queue();
+        let mut async_queue = create_rustapp::tasks::async_queue();
         async_queue.lock().unwrap().connect(NoTls).await.expect("Failed to connect to async queue database");
         // this means you need to have the above line somewhere in `main.rs`, before any async jobs are scheduled
 
@@ -139,11 +139,11 @@ CREATE INDEX fang_tasks_uniq_hash ON fang_tasks(uniq_hash);
 
                 fs::replace(
                     "backend/main.rs",
-                    "let data = create_rust_app::setup();",
+                    "let data = create_rustapp::setup();",
                     &format!(
                         "{example_tasks}
 
-    let data = create_rust_app::setup();"
+    let data = create_rustapp::setup();"
                     ),
                 )?;
             }

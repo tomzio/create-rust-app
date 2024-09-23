@@ -1204,7 +1204,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "create-rust-app"
+name = "create-rustapp"
 version = "11.0.0"
 dependencies = [
  "actix-files",
@@ -1255,7 +1255,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "create-rust-app_cli"
+name = "create-rustapp_cli"
 version = "11.0.0"
 dependencies = [
  "Inflector",

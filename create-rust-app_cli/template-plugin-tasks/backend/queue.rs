@@ -25,7 +25,7 @@ const NUM_WORKERS: u32 = 2;
 
 /// Executes tasks in the default work queue
 pub fn main() {
-    let queue = create_rust_app::tasks::queue();
+    let queue = create_rustapp::tasks::queue();
 
     println!("Starting pool for 'sync' tasks...");
 

@@ -7,7 +7,7 @@ pub const NPM: &'static str = "npm.cmd";
 pub const NPM: &'static str = "npm";
 
 pub fn main() {
-    if !create_rust_app::net::is_port_free(21012) {
+    if !create_rustapp::net::is_port_free(21012) {
         println!("========================================================");
         println!(" ViteJS (the frontend compiler/bundler) needs to run on");
         println!(" port 21012 but it seems to be in use.");

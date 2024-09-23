@@ -70,7 +70,7 @@ if (import.meta.env.DEV_SERVER_PORT) {
                     r"/* Development-only routes */",
                     r#"/* Development-only routes */
             // Mount development-only API routes
-            api_scope = api_scope.service(create_rust_app::dev::endpoints(web::scope("/development")));
+            api_scope = api_scope.service(create_rustapp::dev::endpoints(web::scope("/development")));
             // Mount the admin dashboard on /admin
             app = app.service(web::scope("/admin").service(Files::new("/", ".cargo/admin/dist/").index_file("admin.html")));"#,
                 )?;
@@ -83,7 +83,7 @@ if (import.meta.env.DEV_SERVER_PORT) {
                     r"/* Development-only routes */",
                     r#"/* Development-only routes */
         // Mount development-only API routes
-        api_routes = api_routes.nest("/development", create_rust_app::dev::api());
+        api_routes = api_routes.nest("/development", create_rustapp::dev::api());
         // Mount the admin dashboard on /admin
         app = app.at("/admin", StaticFilesEndpoint::new(".cargo/admin/dist").index_file("admin.html"));"#,
                 )?;

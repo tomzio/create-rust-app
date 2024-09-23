@@ -15,7 +15,7 @@ use super::template_utils::SinglePageApplication;
 ///
 ///  Full example (to render the `views/spa.html` template):
 /// ```
-///  app = app.nest("/my-spa", create_rust_app::render_single_page_application("spa.html"));
+///  app = app.nest("/my-spa", create_rustapp::render_single_page_application("spa.html"));
 /// ```
 pub fn render_single_page_application(view: &str) -> AddDataEndpoint<Route, SinglePageApplication> {
     let view = view.strip_prefix('/').unwrap_or(view);

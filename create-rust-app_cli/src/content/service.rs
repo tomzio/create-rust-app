@@ -63,7 +63,7 @@ fn config(service_name: &str) -> ServiceConfig {
 fn generate_poem(service_name: &str) -> Service {
     let config = config(service_name);
     let contents_template: &str = indoc! {"\
-    use create_rust_app::Database;
+    use create_rustapp::Database;
     use diesel::NotFound;
     use poem::{get, Route, handler, Result, IntoResponse, Response};
     use poem::error::InternalServerError;
@@ -160,7 +160,7 @@ fn generate_actix(service_name: &str, include_qsync_attr: bool) -> Service {
         HttpResponse,
         web::{Data, Json, Path, Query},
     };
-    use create_rust_app::Database;
+    use create_rustapp::Database;
     use diesel::OptionalExtension;
     use qsync::qsync;
     use serde::Deserialize;

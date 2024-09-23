@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use create_rust_app::{Attachment, AttachmentBlob, AttachmentData, Database, Storage};
+use create_rustapp::{Attachment, AttachmentBlob, AttachmentData, Database, Storage};
 use poem::{get, handler, http::StatusCode, IntoResponse, Response, Result, Route, web::{Data, Json, Multipart, Path}};
 use serde::Serialize;
 

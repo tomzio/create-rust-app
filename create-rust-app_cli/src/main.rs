@@ -33,7 +33,7 @@ pub enum BackendDatabase {
 /// Struct to describe the CLI
 #[derive(Parser)]
 #[command(
-    name = "create-rust-app",
+    name = "create-rustapp",
     author,
     version,
     about,
